@@ -29,7 +29,7 @@ public class DriveSubsystem extends SubsystemBase {
 
 
   // The motors on the left side of the drive.
-
+  
 
   private final CANSparkMax leftMotorOne = new CANSparkMax(4, MotorType.kBrushless);
   private final CANSparkMax leftMotorTwo = new CANSparkMax(5, MotorType.kBrushless);
@@ -73,7 +73,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose need to add std deviations 
   //of gyro and encoders to get more accuratepose
   
-  private static NetworkTable table = NetworkTableInstance.getDefault().getTable("Limelight");
+  private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -90,9 +90,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {   
-    getValueX();
-    getValueY(); 
+    //getValueX();
+   // getValueY(); 
     SmartDashboard.putNumber("Coounts PR",m_leftEncoder.getCountsPerRevolution());  
+    
     // Update the odometry in the periodic block to keep track of robot pose
     
   }
@@ -216,7 +217,7 @@ public double getValueA(){
   //method for tank drive so pid voltages and trajectory tracking voltages can be applied
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     m_leftMotors.setVoltage(leftVolts);
-    m_rightMotors.setVoltage(rightVolts);
+    //m_rightMotors.setVoltage(rightVolts);
 
   }
 
@@ -229,8 +230,10 @@ public double getValueA(){
    * @return the average of the two encoder readings
    */
   public double getAverageEncoderDistance() {
-    double rotations = (m_leftEncoder.getPosition() + m_rightEncoder.getPosition()) / 2.0 * 1/112; 
-    return rotations*6;
+    double rotations = (m_leftEncoder.getPosition() + m_rightEncoder.getPosition()) / 2.0 * 1/16.9; 
+    SmartDashboard.putNumber("Revolutions", rotations);
+    SmartDashboard.putNumber("distance", rotations*6*Math.PI);
+    return rotations*6*Math.PI;
   }
 
   /**
