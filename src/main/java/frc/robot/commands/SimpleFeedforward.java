@@ -31,7 +31,7 @@ public class SimpleFeedforward extends CommandBase {
   public void initialize() {
     pidController.setTolerance(0);
 
-    int setPoint = 35;
+    
     SmartDashboard.putNumber("goal angle", turningGoal);
     
    
@@ -41,14 +41,16 @@ public class SimpleFeedforward extends CommandBase {
   @Override
   public void execute() {
 
-    double voltage = feedforward.calculate(drive.getVelocity(), 30)+pidController.calculate(drive.getVelocity(), 35);
-    
+    double currVelocity = drive.getVelocity();
+    double voltage = feedforward.calculate(currVelocity, 30);
+    voltage = voltage + pidController.calculate(drive.getVelocity(), 35);
     
     //voltage = voltage + 0.19*Math.signum(voltage);
-   // SmartDashboard.putNumber("goal angle", (pidController.getSetpoint()));
-    SmartDashboard.putNumber("current angle",drive.getYaw());
+    SmartDashboard.putNumber("goal velocty", 35);
+    SmartDashboard.putNumber("velocity",currVelocity);
     SmartDashboard.putNumber("voltage",voltage);
-    drive.arcadeDrive(0,voltage);
+    drive.arcadeDrive(voltage,0);
+
     
   }
 
