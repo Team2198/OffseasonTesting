@@ -42,11 +42,12 @@ public class SimpleFeedforward extends CommandBase {
   public void execute() {
 
     double currVelocity = drive.getVelocity();
-    double voltage = feedforward.calculate(currVelocity, 30);
+    double voltage = feedforward.calculate(35);
     voltage = voltage + pidController.calculate(drive.getVelocity(), 35);
     
     //voltage = voltage + 0.19*Math.signum(voltage);
     SmartDashboard.putNumber("goal velocty", 35);
+
     SmartDashboard.putNumber("velocity",currVelocity);
     SmartDashboard.putNumber("voltage",voltage);
     drive.arcadeDrive(voltage,0);
