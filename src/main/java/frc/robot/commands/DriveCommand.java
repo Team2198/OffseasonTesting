@@ -29,15 +29,14 @@ public class  DriveCommand extends CommandBase {
   
   DoubleSupplier xVoltage;
   DoubleSupplier yVoltage;
-  BooleanSupplier directionButtonState;
+  
   double directionCoefficient;
   DoublePublisher pitchPub;
   DoublePublisher setpointPub;
   int count = 0;
   //private static NetworkTable table = NetworkTableInstance.getDefault().getTable("SmartDashboard");
-  public DriveCommand(DriveSubsystem drive, DoubleSupplier x, DoubleSupplier y, BooleanSupplier directionState) {
+  public DriveCommand(DriveSubsystem drive, DoubleSupplier y, DoubleSupplier x) {
     m_drive = drive;
-    directionButtonState = directionState;
     
     xVoltage = x;
     
@@ -73,7 +72,8 @@ public class  DriveCommand extends CommandBase {
     SmartDashboard.putNumber("pitch charge stATION", m_drive.getPitch());
     SmartDashboard.putNumber("left encoder 2", m_drive.leftEncoderReading()*1/16.36);//1/15 low speed gear ratio
     SmartDashboard.putNumber("x", yVoltage.getAsDouble()); */
-    m_drive.tankDriveVolts(xVoltage.getAsDouble()*-1, yVoltage.getAsDouble()*-1);
+    m_drive.arcadeDrive(yVoltage.getAsDouble(), xVoltage.getAsDouble());
+    //m_drive.arcadeDrive(yVoltage.getAsDouble(), 0.19);
     count+=1;
     SmartDashboard.putNumber("LimelightX" , m_drive.getValueX());
     //double[] graphingData = {m_drive.getPitch(), 0};

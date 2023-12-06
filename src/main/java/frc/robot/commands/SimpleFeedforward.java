@@ -3,24 +3,24 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class SimplePID extends CommandBase {
+public class SimpleFeedforward extends CommandBase {
   /** Creates a new SimplePID. */
   double initialPosition;
   PIDController pidController;
   DriveSubsystem drive;
   double turningAmount;
   double turningGoal;
-
-  public SimplePID(DriveSubsystem drive) {
+  SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.1093, 0.10643);
+  public SimpleFeedforward(DriveSubsystem drive) {
     this.drive = drive;
     
-    pidController = new PIDController(0.029, 0, 0.005);
+    pidController = new PIDController(0.0066, 0, 0);
     addRequirements(this.drive);
     SmartDashboard.putData("pidcontroller",pidController);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -31,35 +31,19 @@ public class SimplePID extends CommandBase {
   public void initialize() {
     pidController.setTolerance(0);
 
-    initialPosition = drive.getYaw();
-    turningAmount = 90;
-    turningGoal = initialPosition + turningAmount; 
-    if(turningGoal > 180.0){
-      turningGoal = turningGoal - 360; 
-    }
-    
-    
-    else if(turningGoal<-180){
-      turningGoal = turningGoal + 360;
-    }
+    int setPoint = 35;
     SmartDashboard.putNumber("goal angle", turningGoal);
-    pidController.enableContinuousInput(-180, 180);
-    pidController.setTolerance(2);
+    
+   
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double voltage = pidController.calculate(drive.getYaw(), initialPosition + turningAmount);
-    if (voltage<0){
-      voltage = voltage - 0.19;
-    }
-    else if (voltage>0){
-      voltage = voltage + 0.19;
-    }
-    else{
-      voltage = 0;
-    }
+
+    double voltage = feedforward.calculate(drive.getVelocity(), 30)+pidController.calculate(drive.getVelocity(), 35);
+    
+    
     //voltage = voltage + 0.19*Math.signum(voltage);
    // SmartDashboard.putNumber("goal angle", (pidController.getSetpoint()));
     SmartDashboard.putNumber("current angle",drive.getYaw());

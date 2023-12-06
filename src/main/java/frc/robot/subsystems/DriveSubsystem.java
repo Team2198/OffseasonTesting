@@ -34,7 +34,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final CANSparkMax leftMotorOne = new CANSparkMax(4, MotorType.kBrushless);
   private final CANSparkMax leftMotorTwo = new CANSparkMax(5, MotorType.kBrushless);
   private final CANSparkMax rightMotorOne = new CANSparkMax(2, MotorType.kBrushless);
-  private final CANSparkMax rightMotorTwo = new CANSparkMax(1, MotorType.kBrushless);
+  private final CANSparkMax rightMotorTwo = new CANSparkMax(3, MotorType.kBrushless);
   
   private final MotorControllerGroup m_leftMotors =
   new MotorControllerGroup(
@@ -80,7 +80,7 @@ public class DriveSubsystem extends SubsystemBase {
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
-    m_rightMotors.setInverted(true);
+    m_leftMotors.setInverted(true);
     
     
     
@@ -93,6 +93,7 @@ public class DriveSubsystem extends SubsystemBase {
     //getValueX();
    // getValueY(); 
     SmartDashboard.putNumber("Coounts PR",m_leftEncoder.getCountsPerRevolution());  
+    
     
     // Update the odometry in the periodic block to keep track of robot pose
     
@@ -110,6 +111,12 @@ public void setPipeline(int pipeline){
   table.getEntry("pipeline").setNumber(pipeline);
   
 }
+
+public double getVelocity(){
+  return (m_leftEncoder.getVelocity()+m_rightEncoder.getVelocity())/2*1/16.9;
+}
+
+
 
 
 
@@ -205,7 +212,7 @@ public double getValueA(){
    */
   //method for arcade drive takes the 
   public void arcadeDrive(double x, double y) {
-    m_drive.arcadeDrive(x, y);
+    m_drive.arcadeDrive(x*0.5, y*0.5);
   }
 
   /**
@@ -216,8 +223,8 @@ public double getValueA(){
    */
   //method for tank drive so pid voltages and trajectory tracking voltages can be applied
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    m_leftMotors.setVoltage(leftVolts);
-    //m_rightMotors.setVoltage(rightVolts);
+    m_leftMotors.setVoltage(leftVolts*12);
+    m_rightMotors.setVoltage(rightVolts*12);
 
   }
 
