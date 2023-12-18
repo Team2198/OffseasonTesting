@@ -54,7 +54,8 @@ public class RobotContainer {
         driverController.b().onTrue(new cubeLocker(gearBoxSystem, true).andThen(new WaitCommand(0.5)).andThen(new shootCube(gearBoxSystem, false)).andThen(new WaitCommand(0).andThen(new shootCube(gearBoxSystem, true))));
         driverController.x().onTrue(new cubeLocker(gearBoxSystem, true));
         driverController.y().onTrue(new cubeLocker(gearBoxSystem, false));
-        driverController.rightBumper().onTrue(new ScaleBalance(drive));
+        driverController.rightBumper().onTrue(new ledCommand(drive, 0));
+        driverController.leftBumper().onTrue(new ledCommand(drive, 1));
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());

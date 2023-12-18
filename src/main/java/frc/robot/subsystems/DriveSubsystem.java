@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -46,7 +47,7 @@ public class DriveSubsystem extends SubsystemBase {
       rightMotorOne,
       rightMotorTwo);
 
-
+  private final Spark led; 
 
   //declaring gyro
 
@@ -81,7 +82,7 @@ public class DriveSubsystem extends SubsystemBase {
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
     m_leftMotors.setInverted(true);
-    
+    led = new Spark(4);
     
     
     
@@ -99,6 +100,17 @@ public class DriveSubsystem extends SubsystemBase {
     
   }
 
+  public void setBlue(){
+    led.set(0.85);
+  }
+
+  public void setRed(){
+    led.set(0.61);
+  }
+
+  public void setPink(){
+    led.set(0.57);
+  }
   /**
    * Returns the currently-estimated pose of the robot.
    *
@@ -212,7 +224,7 @@ public double getValueA(){
    */
   //method for arcade drive takes the 
   public void arcadeDrive(double x, double y) {
-    m_drive.arcadeDrive(x*0.5, y*0.5);
+    m_drive.arcadeDrive(x, y);
   }
 
   /**

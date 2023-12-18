@@ -50,8 +50,8 @@ public class SimpleFeedforward extends CommandBase {
 
     SmartDashboard.putNumber("velocity",currVelocity);
     SmartDashboard.putNumber("voltage",voltage);
-    drive.arcadeDrive(voltage,0);
-
+    drive.tankDriveVolts(voltage,voltage);
+  
     
   }
 
@@ -60,7 +60,7 @@ public class SimpleFeedforward extends CommandBase {
   public void end(boolean interrupted) {
     drive.tankDriveVolts(0, 0);
   }
-
+  
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
